@@ -12,4 +12,7 @@ export { Ray } from './math/Ray.js';
 export { Sphere } from './math/Sphere.js';
 export { Triangle } from './math/Triangle.js';
 export { Vector3 } from './math/Vector3.js';
+// Renderers
+export { WebGLRenderer } from './renderers/WebGLRenderer.js';
+// Constants
 export * from './constants.js';
