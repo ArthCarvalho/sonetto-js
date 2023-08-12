@@ -1,0 +1,20 @@
+{
+  "name": "sonetto",
+  "version": "1.0.0",
+  "description": "Sonetto RPG Engine",
+  "scripts": {
+    "dev": "vite --open",
+    "build": "vite build",
+    "preview": "vite build && vite preview --host --open"
+  },
+  "keywords": [
+    "game",
+    "jrpg",
+    "rpg"
+  ],
+  "author": "Arthur Carvalho de Souza Lima",
+  "license": "ISC",
+  "devDependencies": {
+    "vite": "^4.4.9"
+  }
+}
