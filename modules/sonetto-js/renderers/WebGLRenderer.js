@@ -284,7 +284,7 @@ class WebGLRenderer {
 			_isContextLost = true;
 		}
 
-		function onContextRestore(/* event */) {
+		function onContextRestore() {
 			console.log('SonettoJS.WebGLRenderer: Context Restored.');
 
 			_isContextLost = false;
@@ -296,7 +296,22 @@ class WebGLRenderer {
 			console.error('SonettoJS.WebGLRenderer: A WebGL context could not be created. Reason: ', event.statusMessage);
 		}
 
-    // TODO Rendering
+    // Rendering
+
+    this.render = function (scene, camera) {
+      if (_isContextLost === true) return;
+
+      if (camera !== undefined && camera.isCamera !== true) {
+				console.error('SonettoJS.WebGLRenderer.render: camera is not an instance of SonettoJS.Camera.');
+				return;
+			}
+
+      // update scene graph
+
+      // update camera matrices and frustum
+
+
+    };
 
   }
 
