@@ -169,6 +169,135 @@ class WebGLRenderer {
 			const extension = extensions.get('WEBGL_lose_context');
 			if(extension) extension.restoreContext();
 		};
+
+    this.getPixelRatio = function () {
+			return _pixelRatio;
+		};
+
+    this.setPixelRatio = function (value) {
+			if(value === undefined) return;
+
+			_pixelRatio = value;
+
+			this.setSize(_width, _height, false);
+		};
+
+    this.getSize = function (target) {
+			return target.set(_width, _height);
+		};
+
+    this.setSize = function (width, height, updateStyle = true) {
+      _width = width;
+			_height = height;
+
+      canvas.width = Math.floor(width * _pixelRatio);
+			canvas.height = Math.floor(height * _pixelRatio);
+
+      if(updateStyle === true) {
+				canvas.style.width = width + 'px';
+				canvas.style.height = height + 'px';
+			}
+
+      this.setViewport(0, 0, width, height);
+    };
+
+    this.getDrawingBufferSize = function (target) {
+			return target.set(_width * _pixelRatio, _height * _pixelRatio).floor();
+		};
+
+    this.setDrawingBufferSize = function (width, height, pixelRatio) {
+			_width = width;
+			_height = height;
+
+			_pixelRatio = pixelRatio;
+
+			canvas.width = Math.floor(width * pixelRatio);
+			canvas.height = Math.floor(height * pixelRatio);
+
+			this.setViewport(0, 0, width, height);
+		};
+
+    this.getCurrentViewport = function (target) {
+			return target.copy(_currentViewport);
+		};
+
+    this.getViewport = function (target) {
+			return target.copy(_viewport);
+		};
+
+    this.setViewport = function (x, y, width, height) {
+			if(x.isVector4) {
+				_viewport.set(x.x, x.y, x.z, x.w);
+			} else {
+				_viewport.set(x, y, width, height);
+			}
+
+			state.viewport(_currentViewport.copy(_viewport).multiplyScalar(_pixelRatio).floor());
+		};
+
+    // Scissor
+    this.getScissor = function (target) {
+			return target.copy(_scissor);
+		};
+
+    this.setScissor = function (x, y, width, height) {
+			if(x.isVector4) {
+				_scissor.set(x.x, x.y, x.z, x.w);
+			} else {
+				_scissor.set(x, y, width, height);
+			}
+
+			state.scissor(_currentScissor.copy(_scissor).multiplyScalar(_pixelRatio).floor());
+		};
+
+		this.getScissorTest = function () {
+			return _scissorTest;
+		};
+
+		this.setScissorTest = function (boolean) {
+			state.setScissorTest(_scissorTest = boolean);
+		};
+
+		this.setOpaqueSort = function (method) {
+			_opaqueSort = method;
+		};
+
+		this.setTransparentSort = function (method) {
+			_transparentSort = method;
+		};
+
+    // TODO Clearing
+
+    // Disposal
+    this.dispose = function () {
+      canvas.removeEventListener('webglcontextlost', onContextLost, false);
+			canvas.removeEventListener('webglcontextrestored', onContextRestore, false);
+			canvas.removeEventListener('webglcontextcreationerror', onContextCreationError, false);
+		};
+
+    // Events
+    function onContextLost(event) {
+			event.preventDefault();
+
+			console.log('SonettoJS.WebGLRenderer: Context Lost.');
+
+			_isContextLost = true;
+		}
+
+		function onContextRestore(/* event */) {
+			console.log('SonettoJS.WebGLRenderer: Context Restored.');
+
+			_isContextLost = false;
+
+			initGLContext();
+		}
+
+		function onContextCreationError(event) {
+			console.error('SonettoJS.WebGLRenderer: A WebGL context could not be created. Reason: ', event.statusMessage);
+		}
+
+    // TODO Rendering
+
   }
 
   get coordinateSystem() {

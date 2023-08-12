@@ -20,4 +20,4 @@ const createCanvas = (target, fullSize = true) => {
 
 const canvas = createCanvas(document.body);
 
-let blah = new SonettoJS.Vector3(0, 0, 0);
+const renderer = new SonettoJS.WebGLRenderer({ canvas });
